@@ -13,7 +13,10 @@ class RegistrationProfile(models.Model):
     )
     identity_confirmed = models.BooleanField(default=False)
     confirmation_key = models.CharField(max_length=20)
-
+    def send_user_confirmation(self):
+        pass
+    def send_admin_notification(self):
+        pass
 @receiver(post_save, sender=RegistrationProfile)
 def set_confirmation_key(sender, instance, created, **kwargs):
     if created:

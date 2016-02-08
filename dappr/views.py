@@ -22,5 +22,6 @@ class RegistrationView(FormValidMessageMixin, FormView):
         user.set_unusable_password()
         user.is_active = False
         user.save();
-        RegistrationProfile.objects.create(user=user)
+        reg_profile = RegistrationProfile.objects.create(user=user)
+        reg_profile.send_user_confirmation()
         return super(RegistrationView, self).form_valid(form)
