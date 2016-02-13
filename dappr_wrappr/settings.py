@@ -27,8 +27,18 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+EMAIL_HOST = os.environ['EMAIL_HOST']
 
+EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+
+DEFAULT_FROM_EMAIL = 'donotreply@malabarhousereservations.com'
 # Application definition
+
+SITE_ID = 1
+
+ADMINS = [('Millan Philipose', 'millan.philipose@gmail.com')]
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -37,6 +47,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'dappr',
 )
 

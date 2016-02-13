@@ -2,12 +2,10 @@
 The html email sent to confirm user identity
 
 :context site: current Site
-:context url: confirmation link url
+:context conf_key: one use confirmation key to be plugged into confirmation url
 {% endcomment %}
 Thank you for registering with {{ site.name }}<br>
 Please click the link below to confirm your identity.<br>
-{{ site.domain }}{{ url }}
-<i>
-    If you did not request this, DO NOT CLICK THE LINK.
-    Please ignore or delete this email, and contact the site administrator.
-</i>
+<a href="{{ site.domain }}{% url "confirmation_view" conf_key %}">
+    {{ site.domain }}{% url "confirmation_view" conf_key %}
+</a>
