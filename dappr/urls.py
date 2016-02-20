@@ -20,4 +20,4 @@ from dappr import views#, ConfirmationView
 urlpatterns = [
     url(r'register', views.RegistrationForm.as_view(), name='registration_view'),
     url(r'confirm/(?P<conf_key>[0-9]+)', views.UserPasswordUpdate.as_view(), name='confirmation_view'),
-]
+] 

@@ -6,18 +6,10 @@ A template to display the user registration form.
 :context messages: success messages
 {% endcomment %}
 {% block content %}
-Please enter your information here.<br>
+Please enter your information here. Upon submission, you will be sent an email allowing you to set your password.<br>
 <form action=""	method="post">
 	{% csrf_token %}
-	{{ form }}
+	{{ form.as_p }}
 	<input type="submit" value="Submit">
 </form>
-{% if form.errors %}
-    {{ form.errors }}
-{% endif %}
-{% url "confirmation_view" 4444 %}
-{% if messages %}
-    {% for message in messages %}{{ message }}{% endfor %}
-	
-{% endif %} 
 {% endblock %}

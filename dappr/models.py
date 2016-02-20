@@ -17,7 +17,11 @@ class RegistrationProfile(models.Model):
     )
     identity_confirmed = models.BooleanField(default=False)
     confirmation_key = models.CharField(max_length=20, null=True, blank=True)
+    approved = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
     def send_user_confirmation(self):
+        self.confirmation_key = get_random_string(length=20, allowed_chars='0123456789')
+        self.save()
         context = {
             "site": Site.objects.get(pk=settings.SITE_ID),
             "conf_key": self.confirmation_key,
@@ -28,6 +32,8 @@ class RegistrationProfile(models.Model):
             html_message=render_to_string("registration/confirmation_email.html", context=context),
         )
     def send_admin_notification(self):
+        self.identity_confirmed = True
+        self.save()
         context = {
            "site": Site.objects.get(pk=settings.SITE_ID),
            "user": self.user
@@ -37,11 +43,21 @@ class RegistrationProfile(models.Model):
             render_to_string("registration/admin_notification_email.html", context=context),
             html_message=render_to_string("registration/admin_notification_email.html", context=context),
         )
-        self.identity_confirmed = True
-        self.save()
-@receiver(post_save, sender=RegistrationProfile)
-def set_confirmation_key(sender, instance, created, **kwargs):
-    if created:
-        instance.confirmation_key = get_random_string(length=20, allowed_chars='0123456789')# get_random_string(length=20)
-        instance.save()
-        instance.send_user_confirmation()
+    def send_approval_notification(self):
+        context = {
+           "site": Site.objects.get(pk=settings.SITE_ID),
+        }
+        self.user.email_user(
+            render_to_string("registration/success_email_subject.txt", context=context),
+            render_to_string("registration/success_email.html", context=context),
+            html_message=render_to_string("registration/success_email.html", context=context),           
+        )
+    def send_rejection_notification(self):
+        context = {
+            "site": Site.objects.get(pk=settings.SITE_ID),
+        }
+        self.user.email_user(
+            render_to_string("registration/rejection_email_subject.txt", context=context),
+            render_to_string("registration/rejection_email.html", context=context),
+            html_message=render_to_string("registration/rejection_email.html", context=context),           
+        )
